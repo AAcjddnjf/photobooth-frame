@@ -3,108 +3,79 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>My Photo Frame Booth</title>
+  <title>Sketch Booth Frame</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="app">
-    <section class="screen active" id="screenStart">
-      <div class="hero">
-        <p class="kicker">PHOTO FRAME BOOTH</p>
-        <h1>내 프레임으로<br>순서대로 찍기</h1>
-        <p class="desc">프레임은 네가 직접 올리고, 사진은 이 기기 안에서만 처리돼. 저장하거나 새로고침하면 기록은 남지 않아.</p>
-        <button class="primary" id="startBtn">시작하기</button>
-      </div>
+    <section id="startScreen" class="panel start">
+      <h1>Sketch Booth Frame</h1>
+      <p>사용자 사진은 서버로 올라가지 않고 이 브라우저 안에서만 처리됩니다.</p>
+      <button id="startBtn" class="primary">시작하기</button>
     </section>
 
-    <section class="screen" id="screenSetup">
-      <div class="panel">
-        <button class="back" data-back="screenStart">‹ 처음으로</button>
-        <h2>프레임 선택</h2>
-        <p class="hint">먼저 최종 이미지 크기를 고르고, 그 크기에 맞는 투명 PNG 프레임을 올려. 사진이 들어갈 칸은 프레임 PNG에서 투명해야 해.</p>
-
-        <div class="choiceGrid" id="sizeChoices">
-          <button class="choice selected" data-size="1080x1920" data-slots="4">1080×1920<br><span>세로 네컷</span></button>
-          <button class="choice" data-size="1080x1350" data-slots="4">1080×1350<br><span>인스타형</span></button>
-          <button class="choice" data-size="1920x1080" data-slots="4">1920×1080<br><span>가로형</span></button>
-          <button class="choice" data-size="custom" data-slots="4">직접 입력<br><span>원하는 크기</span></button>
-        </div>
-
-        <div class="customBox hidden" id="customBox">
-          <label>가로 px <input id="customW" type="number" value="1080" min="300" max="4000" /></label>
-          <label>세로 px <input id="customH" type="number" value="1920" min="300" max="4000" /></label>
-        </div>
-
-        <label class="filePick">
-          <input id="frameInput" type="file" accept="image/png,image/webp,image/jpeg" />
-          <span id="frameLabel">프레임 이미지 올리기</span>
-        </label>
-
-        <h2>사진 넣을 칸 맞추기</h2>
-        <p class="hint">네 프레임마다 투명칸 위치가 다르니까, 1컷부터 4컷까지 사진 박스 위치를 맞춰. 대충 맞춰도 나중에 각 컷을 다시 조절할 수 있어.</p>
-
-        <div class="slotTabs" id="slotTabs"></div>
-        <div class="stageWrap">
-          <canvas id="layoutCanvas" width="540" height="960"></canvas>
-        </div>
-
-        <div class="controls compact">
-          <label>X <input id="slotX" type="range" min="0" max="100" value="8" /></label>
-          <label>Y <input id="slotY" type="range" min="0" max="100" value="10" /></label>
-          <label>W <input id="slotW" type="range" min="5" max="100" value="84" /></label>
-          <label>H <input id="slotH" type="range" min="5" max="100" value="18" /></label>
-        </div>
-
-        <h2>촬영 방식</h2>
-        <div class="choiceGrid two">
-          <button class="choice mode selected" data-mode="camera">카메라로 찍기</button>
-          <button class="choice mode" data-mode="upload">사진 업로드</button>
-        </div>
-
-        <button class="primary" id="goShootBtn">촬영 화면으로</button>
+    <section id="setupScreen" class="panel hidden">
+      <h2>프레임 설정</h2>
+      <label>프레임 크기
+        <select id="sizePreset">
+          <option value="1080x1920">1080 × 1920 세로</option>
+          <option value="1080x1350">1080 × 1350</option>
+          <option value="1920x1080">1920 × 1080 가로</option>
+          <option value="custom">직접 입력</option>
+        </select>
+      </label>
+      <div class="grid2" id="customSizeBox">
+        <label>가로 <input id="canvasW" type="number" value="1080" min="300"></label>
+        <label>세로 <input id="canvasH" type="number" value="1920" min="300"></label>
       </div>
+      <label>프레임 PNG 올리기 <input id="frameInput" type="file" accept="image/png,image/*"></label>
+      <p class="hint">프레임 PNG는 캐릭터와 배경은 불투명하게, 네가 들어갈 칸만 투명하게 만들어야 합니다.</p>
+      <button id="toSlotsBtn" class="primary">다음</button>
     </section>
 
-    <section class="screen" id="screenShoot">
-      <div class="shootTop">
-        <button class="back" data-back="screenSetup">‹ 설정으로</button>
-        <div class="status"><span id="shotNow">1</span>/<span id="shotTotal">4</span>컷</div>
-      </div>
+    <section id="slotScreen" class="panel hidden">
+      <h2>사진 칸 맞추기</h2>
+      <p class="hint">노란 칸이 네 사진이 들어갈 자리입니다. 프레임의 투명 칸과 맞춰 주세요.</p>
+      <div class="stageWrap"><div id="slotPreview" class="stage"></div></div>
+      <div id="slotControls" class="slotControls"></div>
+      <button id="toShootBtn" class="primary">촬영/업로드로 이동</button>
+    </section>
 
-      <div class="booth">
-        <div class="liveBox" id="liveBox">
-          <video id="video" playsinline muted autoplay></video>
-          <canvas id="uploadPreview"></canvas>
-          <div class="countdown hidden" id="countdown">3</div>
-        </div>
-        <canvas id="shootCanvas" width="540" height="960"></canvas>
+    <section id="shootScreen" class="panel hidden">
+      <div class="topbar">
+        <button id="backToSlotsBtn" class="ghost">칸 수정</button>
+        <span id="shotLabel">1컷</span>
       </div>
-
-      <div class="shootButtons" id="cameraButtons">
-        <button class="primary" id="autoShootBtn">자동 촬영 시작</button>
-        <button class="ghost" id="singleShootBtn">현재 컷만 찍기</button>
+      <div class="stageWrap"><div id="liveStage" class="stage"></div></div>
+      <div class="actions">
+        <button id="cameraModeBtn" class="secondary">카메라로 찍기</button>
+        <button id="uploadModeBtn" class="secondary">사진 업로드</button>
       </div>
-
-      <div class="shootButtons hidden" id="uploadButtons">
-        <label class="primary fileButton"><input id="photoInput" type="file" accept="image/*" />현재 컷 사진 선택</label>
-        <label class="ghost fileButton"><input id="multiPhotoInput" type="file" accept="image/*" multiple />4장 한 번에 선택</label>
+      <div id="cameraControls" class="actions hidden">
+        <button id="startCameraBtn" class="primary">카메라 켜기</button>
+        <button id="autoShootBtn" class="primary">1컷부터 자동 촬영</button>
+        <button id="captureOneBtn" class="secondary">현재 컷만 찍기</button>
       </div>
-
+      <div id="uploadControls" class="actions hidden">
+        <input id="photoInput" type="file" accept="image/*" multiple>
+        <button id="applyUploadBtn" class="primary">선택한 사진 넣기</button>
+      </div>
+      <div id="countdown" class="countdown hidden">3</div>
       <div class="thumbs" id="thumbs"></div>
+      <button id="finishBtn" class="primary hidden">완성본 보기</button>
     </section>
 
-    <section class="screen" id="screenResult">
-      <div class="panel resultPanel">
-        <h2>완성</h2>
-        <canvas id="resultCanvas" width="540" height="960"></canvas>
-        <div class="resultBtns">
-          <button class="primary" id="downloadBtn">저장하기</button>
-          <button class="ghost" id="retryBtn">다시 찍기</button>
-          <button class="ghost" id="resetBtn">처음부터</button>
-        </div>
+    <section id="resultScreen" class="panel hidden">
+      <h2>완성본</h2>
+      <div class="resultBox"><img id="resultImg" alt="완성본"></div>
+      <div class="actions">
+        <button id="downloadBtn" class="primary">저장하기</button>
+        <button id="retryBtn" class="secondary">다시 찍기</button>
+        <button id="resetBtn" class="ghost">처음으로</button>
       </div>
     </section>
   </main>
+  <canvas id="workCanvas" class="hidden"></canvas>
   <script src="script.js"></script>
 </body>
 </html>
