@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>같이 찍는 프레임</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <p class="eyebrow">Private photo frame</p>
+      <h1>같이 찍는 프레임</h1>
+      <p class="desc">프레임 이미지를 올리고, 사진을 찍거나 업로드해서 한 장으로 저장합니다. 모든 작업은 이 브라우저 안에서만 처리됩니다.</p>
+    </section>
+
+    <section class="panel">
+      <div class="control-grid">
+        <label class="file-card">
+          <span>1. 프레임 PNG 업로드</span>
+          <small>투명 배경 PNG 추천. 1080×1920 기준.</small>
+          <input id="frameInput" type="file" accept="image/*" />
+        </label>
+
+        <label class="file-card">
+          <span>2. 내 사진 업로드</span>
+          <small>카메라 대신 갤러리 사진 사용 가능.</small>
+          <input id="photoInput" type="file" accept="image/*" />
+        </label>
+      </div>
+
+      <div class="camera-actions">
+        <button id="startCamera" type="button">카메라 켜기</button>
+        <button id="switchCamera" type="button" disabled>전후면 전환</button>
+        <button id="takePhoto" type="button" disabled>사진 찍기</button>
+      </div>
+
+      <div class="edit-actions">
+        <button id="fitCover" type="button">칸에 꽉 채우기</button>
+        <button id="fitContain" type="button">사진 전체 보이기</button>
+        <button id="resetPhoto" type="button">사진 위치 초기화</button>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="preview-wrap">
+        <div class="preview" id="preview">
+          <video id="camera" autoplay playsinline muted></video>
+          <canvas id="canvas" width="1080" height="1920" aria-label="photo preview"></canvas>
+        </div>
+      </div>
+
+      <aside class="tools">
+        <div class="slider-block">
+          <label for="scaleRange">사진 크기</label>
+          <input id="scaleRange" type="range" min="0.2" max="4" step="0.01" value="1" />
+        </div>
+        <div class="slider-block">
+          <label for="xRange">좌우 이동</label>
+          <input id="xRange" type="range" min="-800" max="800" step="1" value="0" />
+        </div>
+        <div class="slider-block">
+          <label for="yRange">상하 이동</label>
+          <input id="yRange" type="range" min="-1200" max="1200" step="1" value="0" />
+        </div>
+
+        <button id="downloadBtn" class="primary" type="button">1080×1920 PNG 저장</button>
+        <button id="clearBtn" class="danger" type="button">전부 지우기</button>
+
+        <p class="notice">프레임과 사진은 서버로 올라가지 않습니다. 다운로드 후 새로고침하거나 지우기를 누르면 화면 기록이 사라집니다.</p>
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
