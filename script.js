@@ -94,22 +94,46 @@ function setupPreset(key) {
 }
 
 function buildPrompt(w, h) {
-  return `Create a ${w}x${h}px photobooth character overlay PNG for one photo slot.
+  return `Create a ${w}x${h}px transparent PNG photobooth overlay for one single photo slot.
 
-Canvas size: exactly ${w}x${h}px.
+Canvas size:
+- Exactly ${w}x${h}px
+- Do not change the size
+- Do not add extra margins
 
-캐릭터 설정 (아래 항목을 원하는 대로 바꿔서 써):
-- 옷차림: [예: 교복 / 캐주얼 후드티 / 드레스 / 한복 / 체크 셔츠]
-- 포즈: [예: 손 흔들기 / 브이 포즈 / 기대는 포즈 / 눈 찡긋 / 팔짱]
-- 스타일: [예: 애니메이션 일러스트 / 실사 / 수채화풍]
-- 머리색/눈색: [예: 검은 머리 / 금발 / 갈색 눈]
+Purpose:
+This image will be placed above a live camera photo inside a photobooth frame.
+A real person will appear in the transparent empty area.
 
-Rules (수정하지 말 것):
-- Transparent PNG background, no white fill, no solid background
-- Center area must be fully transparent — real person appears here
-- Character frame/props can appear at edges, corners, or overlapping naturally
-- No text, no border, no extra margin
-- This PNG will be placed on top of a live camera feed`;
+Character / prop settings:
+- Outfit: [원하는 옷차림 입력: 교복 / 캐주얼 후드티 / 드레스 / 한복 / 정장 / 아이돌 의상]
+- Pose: [원하는 포즈 입력: 브이 / 손 흔들기 / 기대는 포즈 / 윙크 / 하트 포즈]
+- Style: [원하는 스타일 입력: anime illustration / webtoon / semi-realistic / cute idol style]
+- Placement: Put the character or props around the edges, corners, or one side of the slot.
+- Leave enough empty space for a real person to stand in the center.
+
+Transparency rules:
+- The background must be real transparent alpha.
+- Do not draw a checkerboard background.
+- Do not use a white background.
+- Do not use a gray background.
+- Do not fake transparency with a checker pattern.
+- The empty area must be fully transparent so the camera photo can show through.
+- Only the character and decorative props should remain visible.
+
+Composition rules:
+- No text.
+- No border.
+- No solid box.
+- No extra frame unless it is part of the character decoration.
+- Keep the character fixed as an overlay layer.
+- Make it suitable for compositing over a real live camera photo.
+
+Final output:
+- PNG file
+- Transparent background with alpha channel
+- Clean edges
+- The center/person area must stay transparent.`;
 }
 
 function pct(slot) {
@@ -130,15 +154,9 @@ function place(el, slot) {
 
 /* ═══════════════════════════════════════════
    STAGE RENDERING
-   - buildStageBase : 외부 배경 + 슬롯 배경색
-   - buildSlotPhoto : 찍힌 사진 레이어
-   - buildSlotChar  : 캐릭터 PNG 레이어
-   - buildGuide     : 가이드 점선
-   - buildBrand     : 하단 브랜드 텍스트
    ═══════════════════════════════════════════ */
 
 function buildStageBase(stage) {
-  // 외부 배경
   const bg = document.createElement('div');
   bg.style.cssText = `position:absolute;inset:0;z-index:0;background:${state.outsideFrameColor}`;
   if (state.outsideFrameImage) {
@@ -148,7 +166,6 @@ function buildStageBase(stage) {
   }
   stage.appendChild(bg);
 
-  // 슬롯 배경색 (각 칸에 boothBgColor)
   state.slots.forEach(slot => {
     const sb = document.createElement('div');
     sb.style.cssText = `position:absolute;z-index:1;background:${state.boothBgColor}`;
@@ -212,8 +229,10 @@ function buildBrand(stage) {
   stage.appendChild(brand);
 }
 
-/* ── 일반 스테이지 렌더 (캐릭터 미리보기 / 배경색 미리보기 / 프레임 밖 미리보기) ── */
 function renderStage(stage, {guide = false} = {}) {
+  if (video.parentNode && stage.contains(video)) {
+    video.parentNode.removeChild(video);
+  }
   stage.innerHTML = '';
   stage.style.cssText = `position:relative;aspect-ratio:${state.w}/${state.h};overflow:hidden`;
   buildStageBase(stage);
@@ -226,21 +245,25 @@ function renderStage(stage, {guide = false} = {}) {
 
 /* ════════════════════════════════════════════
    촬영 화면 — video를 절대 DOM에서 제거하지 않음
-   preview 컨테이너 안에 video를 clip하는 방식
    ════════════════════════════════════════════ */
-let liveOverlay = null; // 촬영 화면 위에 캐릭터+가이드 레이어
 
 function renderPhotoScreen() {
   const stage = $('#photoPreview');
+  if (video.parentNode && stage.contains(video)) {
+    video.parentNode.removeChild(video);
+  }
   stage.innerHTML = '';
   stage.style.cssText = `position:relative;aspect-ratio:${state.w}/${state.h};overflow:hidden`;
 
-  // 1. 외부 배경
   const bg = document.createElement('div');
   bg.style.cssText = `position:absolute;inset:0;z-index:0;background:${state.outsideFrameColor}`;
+  if (state.outsideFrameImage) {
+    const img = new Image(); img.src = state.outsideFrameImage.src;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+    bg.appendChild(img);
+  }
   stage.appendChild(bg);
 
-  // 2. 슬롯 배경색
   state.slots.forEach(slot => {
     const sb = document.createElement('div');
     sb.style.cssText = `position:absolute;z-index:1;background:${state.boothBgColor}`;
@@ -251,7 +274,6 @@ function renderPhotoScreen() {
     stage.appendChild(sb);
   });
 
-  // 3. 찍힌 사진들 (다른 컷)
   state.slots.forEach((slot, i) => {
     if (i === state.current || !slot.photo) return;
     const wrap = document.createElement('div');
@@ -263,24 +285,20 @@ function renderPhotoScreen() {
     stage.appendChild(wrap);
   });
 
-  // 4. 현재 컷 — 카메라 켜져 있으면 video, 아니면 빈칸
   const currentSlot = state.slots[state.current];
   if (state.cameraReady) {
-    // video를 현재 슬롯 위치에 clip해서 보여주는 wrapper
     const vWrap = document.createElement('div');
     vWrap.id = 'videoWrap';
     vWrap.style.cssText = `position:absolute;z-index:3;overflow:hidden`;
     place(vWrap, currentSlot);
-    vWrap.appendChild(video); // video 이동 (스트림은 유지됨)
+    vWrap.appendChild(video);
     stage.appendChild(vWrap);
 
-    // LIVE 배지
     const badge = document.createElement('div');
     badge.style.cssText = `position:absolute;left:${(currentSlot.x/state.w*100)+1}%;top:${(currentSlot.y/state.h*100)+1}%;z-index:9;background:#c8f23a;color:#0a0a0f;font-size:11px;font-weight:900;border-radius:999px;padding:3px 9px`;
     badge.textContent = 'LIVE';
     stage.appendChild(badge);
   } else {
-    // 카메라 미켜짐 — 빈 슬롯
     const empty = document.createElement('div');
     empty.style.cssText = `position:absolute;z-index:3;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.3);font-size:14px;font-weight:700`;
     place(empty, currentSlot);
@@ -288,13 +306,9 @@ function renderPhotoScreen() {
     stage.appendChild(empty);
   }
 
-  // 5. 캐릭터 PNG (z-index 5 — video 위)
   buildCharacters(stage, 5);
-
-  // 6. 브랜드
   buildBrand(stage);
 
-  // UI 업데이트
   $('#currentShotText').textContent = `${state.current + 1}컷 촬영 중`;
   renderThumbs();
   const allDone = state.slots.every(s => s.photo);
@@ -336,17 +350,22 @@ async function startCamera() {
     if (state.stream) state.stream.getTracks().forEach(t => t.stop());
     state.stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}, audio:false});
     video.srcObject = state.stream;
+
+    state.cameraReady = true;
+    renderPhotoScreen(); 
+
     await video.play();
     await new Promise(res => {
       if (video.readyState >= 2) { res(); return; }
       video.addEventListener('canplay', res, {once:true});
     });
-    state.cameraReady = true;
+
     $('#captureBtn').disabled = false;
     $('#autoShootBtn').disabled = false;
-    renderPhotoScreen(); // video가 DOM에 붙음
   } catch(e) {
     alert('카메라가 안 켜졌어. 브라우저 설정에서 카메라 접근을 허용해 줘.\n(' + e.message + ')');
+    state.cameraReady = false;
+    renderPhotoScreen();
   }
 }
 
@@ -367,8 +386,10 @@ function drawSlotBg(ctx, x, y, w, h) {
   ctx.fillRect(x, y, w, h);
 }
 function drawCover(ctx, img, x, y, w, h) {
-  const cover = Math.max(w / img.width, h / img.height);
-  const dw = img.width * cover, dh = img.height * cover;
+  const iw = img.width || w;
+  const ih = img.height || h;
+  const cover = Math.max(w / iw, h / ih);
+  const dw = iw * cover, dh = ih * cover;
   ctx.drawImage(img, x + (w-dw)/2, y + (h-dh)/2, dw, dh);
 }
 
@@ -381,15 +402,19 @@ function captureCurrent() {
   cnv.width = slot.w; cnv.height = slot.h;
   const ctx = cnv.getContext('2d');
   drawSlotBg(ctx, 0, 0, slot.w, slot.h);
+
   const vw = video.videoWidth, vh = video.videoHeight;
-  const tr = slot.w / slot.h, vr = vw / vh;
-  let sx = 0, sy = 0, sw = vw, sh = vh;
-  if (vr > tr) { sw = vh * tr; sx = (vw - sw) / 2; }
-  else          { sh = vw / tr; sy = (vh - sh) / 2; }
-  ctx.save();
-  ctx.translate(slot.w, 0); ctx.scale(-1, 1);
-  ctx.drawImage(video, sx, sy, sw, sh, 0, 0, slot.w, slot.h);
-  ctx.restore();
+  if (vw > 0 && vh > 0) {
+    const tr = slot.w / slot.h, vr = vw / vh;
+    let sx = 0, sy = 0, sw = vw, sh = vh;
+    if (vr > tr) { sw = vh * tr; sx = (vw - sw) / 2; }
+    else          { sh = vw / tr; sy = (vh - sh) / 2; }
+    ctx.save();
+    ctx.translate(slot.w, 0); ctx.scale(-1, 1);
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, slot.w, slot.h);
+    ctx.restore();
+  }
+
   const img = new Image(); img.src = cnv.toDataURL('image/png');
   state.slots[state.current].photo = img;
   return true;
@@ -416,7 +441,7 @@ async function autoShoot() {
   for (let i = state.current; i < 4; i++) {
     state.current = i;
     renderPhotoScreen();
-    await wait(200); // 화면 업데이트 후 카운트다운
+    await wait(200);
     await countdown();
     captureCurrent();
     await wait(400);
@@ -430,12 +455,9 @@ async function autoShoot() {
 function finalImage() {
   const cnv = $('#workCanvas'); cnv.width = state.w; cnv.height = state.h;
   const ctx = cnv.getContext('2d');
-  // 외부 배경
   ctx.fillStyle = state.outsideFrameColor; ctx.fillRect(0, 0, state.w, state.h);
   if (state.outsideFrameImage) drawCover(ctx, state.outsideFrameImage, 0, 0, state.w, state.h);
-  // 슬롯 배경색
   state.slots.forEach(slot => drawSlotBg(ctx, slot.x, slot.y, slot.w, slot.h));
-  // 사진
   state.slots.forEach(slot => {
     if (!slot.photo) return;
     ctx.save();
@@ -443,11 +465,9 @@ function finalImage() {
     drawCover(ctx, slot.photo, slot.x, slot.y, slot.w, slot.h);
     ctx.restore();
   });
-  // 캐릭터
   state.slots.forEach(slot => {
     if (slot.char) ctx.drawImage(slot.char, slot.x, slot.y, slot.w, slot.h);
   });
-  // 브랜드 텍스트
   const lastSlot = state.slots[3];
   const bottomTop = lastSlot.y + lastSlot.h;
   const brandY = bottomTop + (state.h - bottomTop) / 2 + Math.round(state.w * .015);
@@ -498,7 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
   bind('#toPhotoBtn', () => {
     state.current = 0;
     state.cameraReady = false;
-    // photo preview aspect ratio 설정
     $('#photoPreview').style.aspectRatio = `${state.w} / ${state.h}`;
     renderPhotoScreen();
     show('#photoScreen');
