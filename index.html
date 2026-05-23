@@ -3,80 +3,109 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Real Four-Cut Booth</title>
+  <meta name="theme-color" content="#111111" />
+  <title>Sketch Booth</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="app">
-    <section id="guideScreen" class="panel hero">
-      <div class="pill">REAL FOUR-CUT SIZE</div>
-      <h1>진짜 네컷 비율로 만들고, 출력 모션까지</h1>
-      <p class="lead">이번 버전은 흔히 쓰는 인생네컷 느낌의 출력 비율을 프리셋으로 넣고, 배경색 선택, 흑백 전환, 마지막 포토부스 출력 모션까지 붙인 버전이야.</p>
-
-      <div class="flow">
-        <div class="card"><b>1. 출력 크기 고르기</b><p>2×6 스트립, 4×6 카드, 모바일 미리보기 비율 중에서 고른다.</p></div>
-        <div class="card"><b>2. 캐릭터 PNG 준비</b><p>각 칸 크기에 맞춰 컷별 PNG를 만든다. 사람이 들어갈 부분은 투명하게 비운다.</p></div>
-        <div class="card"><b>3. 배경/색감 설정</b><p>배경색, 전체 배경 이미지, 흑백 전환을 선택한다.</p></div>
-        <div class="card"><b>4. 촬영 후 출력</b><p>사진을 찍거나 업로드한 뒤, 포토부스에서 뽑히는 듯한 모션 후 저장한다.</p></div>
+    <section id="homeScreen" class="screen home">
+      <div class="nav">
+        <div class="logo">Sketch Booth</div>
+        <div class="navHint">no login · no storage</div>
       </div>
 
-      <div class="specBox">
-        <h2>들어간 프리셋</h2>
-        <div class="specGrid three">
-          <div><span>2×6 스트립 기본</span><strong>600 × 1800</strong></div>
-          <div><span>2×6 고해상도</span><strong>1200 × 3600</strong></div>
-          <div><span>4×6 카드형</span><strong>1200 × 1800</strong></div>
-          <div><span>모바일 미리보기</span><strong>1080 × 1920</strong></div>
-          <div><span>사진 칸 수</span><strong>4컷 고정</strong></div>
-          <div><span>저장 형식</span><strong>PNG</strong></div>
+      <div class="hero">
+        <div class="heroText">
+          <p class="kicker">나만의 네컷 제작소</p>
+          <h1>프레임 만들기부터 촬영까지, 여기서 끝.</h1>
+          <p class="lead">먼저 네컷 사이즈를 고르고, 그 칸에 맞는 캐릭터 PNG를 만든 다음, 사진을 찍고 마지막에 배경을 고르면 돼. 업로드한 이미지는 서버에 저장되지 않고 브라우저 안에서만 처리돼.</p>
+          <div class="heroButtons">
+            <button id="startBtn" class="primary">시작하기</button>
+            <button id="jumpGuideBtn" class="secondary">사용 방법 보기</button>
+          </div>
         </div>
-        <p class="small">정확히 말하면 브랜드 공식 규격을 긁어온 건 아니고, 실제 포토부스에서 흔히 쓰는 네컷 스트립 비율에 맞춘 실사용 프리셋이다.</p>
+
+        <div class="guideCard">
+          <div class="bubble">
+            <strong>내가 설명해줄게.</strong>
+            <span>사이즈 고르고, 캐릭터 PNG 넣고, 사진 찍고, 배경 고르면 끝.</span>
+          </div>
+          <img class="guideCharacter" src="guide-character.png" alt="가이드 캐릭터">
+        </div>
       </div>
 
-      <button id="startBtn" class="primary">이 버전으로 시작</button>
+      <section id="howTo" class="howTo">
+        <div class="sectionTitle">
+          <p class="kicker">GUIDE</p>
+          <h2>작업 순서</h2>
+        </div>
+        <div class="steps">
+          <article><b>01</b><h3>사이즈 선택</h3><p>인생네컷처럼 원하는 출력 타입을 카드로 고른다.</p></article>
+          <article><b>02</b><h3>캐릭터 생성</h3><p>선택한 칸 크기에 맞춰 투명 PNG 캐릭터를 만든다.</p></article>
+          <article><b>03</b><h3>캐릭터 업로드</h3><p>1~4컷에 각각 캐릭터 PNG를 올린다. 사진 위에 고정된다.</p></article>
+          <article><b>04</b><h3>사진 촬영</h3><p>카메라로 찍거나 컷별 사진을 업로드한다.</p></article>
+          <article><b>05</b><h3>배경 선택</h3><p>마지막에 배경색이나 배경 이미지를 고른다.</p></article>
+          <article><b>06</b><h3>출력 저장</h3><p>포토부스처럼 출력되는 모션 후 PNG로 저장한다.</p></article>
+        </div>
+      </section>
     </section>
 
-    <section id="buildScreen" class="panel hidden">
-      <div class="top">
-        <button id="backGuideBtn" class="ghost">가이드</button>
+    <section id="sizeScreen" class="screen hidden">
+      <div class="topBar">
+        <button id="sizeBackBtn" class="ghost">처음으로</button>
+        <span class="chip">STEP 1</span>
+      </div>
+      <h1>출력 사이즈를 골라.</h1>
+      <p class="sub">카드를 누르면 완성본 크기와 캐릭터 PNG를 만들어야 하는 칸 크기가 자동으로 나온다.</p>
+
+      <div id="sizeCards" class="sizeCards">
+        <button class="sizeCard" data-preset="strip">
+          <div class="miniFrame stripMini"><i></i><i></i><i></i><i></i></div>
+          <strong>클래식 세로 네컷</strong>
+          <span>600 × 1800</span>
+        </button>
+        <button class="sizeCard" data-preset="strip_hd">
+          <div class="miniFrame stripMini hd"><i></i><i></i><i></i><i></i></div>
+          <strong>고화질 세로 네컷</strong>
+          <span>1200 × 3600</span>
+        </button>
+        <button class="sizeCard" data-preset="card">
+          <div class="miniFrame cardMini"><i></i><i></i><i></i><i></i></div>
+          <strong>카드형 네컷</strong>
+          <span>1200 × 1800</span>
+        </button>
+        <button class="sizeCard" data-preset="mobile">
+          <div class="miniFrame mobileMini"><i></i><i></i><i></i><i></i></div>
+          <strong>모바일형 네컷</strong>
+          <span>1080 × 1920</span>
+        </button>
+      </div>
+
+      <div id="selectedSpec" class="selectedSpec hidden">
+        <div><span>완성본</span><strong id="outputSizeText">-</strong></div>
+        <div><span>각 칸</span><strong id="slotSizeText">-</strong></div>
+        <div><span>캐릭터 파일</span><strong>PNG 투명</strong></div>
+      </div>
+
+      <button id="toCharacterBtn" class="primary wide" disabled>다음: 캐릭터 만들기</button>
+    </section>
+
+    <section id="characterScreen" class="screen hidden">
+      <div class="topBar">
+        <button id="backToSizeBtn" class="ghost">사이즈 다시 고르기</button>
+        <span class="chip">STEP 2</span>
+      </div>
+      <h1>캐릭터 PNG를 만들어서 올려.</h1>
+      <p class="sub">각 캐릭터 이미지는 선택한 칸 크기와 정확히 같은 크기여야 해. 사람이 들어갈 부분은 반드시 투명하게 비워.</p>
+
+      <div class="promptPanel">
         <div>
-          <span class="pill">STEP 1</span>
-          <h2>프레임/출력 설정</h2>
+          <p class="kicker">PROMPT</p>
+          <h2>GPT / Gemini에 넣을 문장</h2>
         </div>
-      </div>
-
-      <label>출력 크기 프리셋
-        <select id="sizePreset">
-          <option value="600x1800">2 × 6 스트립 기본 (600×1800)</option>
-          <option value="1200x3600">2 × 6 스트립 고해상도 (1200×3600)</option>
-          <option value="1200x1800">4 × 6 카드형 (1200×1800)</option>
-          <option value="1080x1920">모바일 미리보기 (1080×1920)</option>
-        </select>
-      </label>
-
-      <div class="specLine">
-        <div>현재 칸 크기 <strong id="slotSizeText">255 × 350</strong></div>
-        <div>컷 수 <strong>4컷</strong></div>
-      </div>
-
-      <label>배경색 고르기</label>
-      <div class="colorChips" id="colorChips">
-        <button class="colorChip active" data-color="#ffffff" style="background:#ffffff"></button>
-        <button class="colorChip" data-color="#f8d7da" style="background:#f8d7da"></button>
-        <button class="colorChip" data-color="#d9ecff" style="background:#d9ecff"></button>
-        <button class="colorChip" data-color="#fde7c6" style="background:#fde7c6"></button>
-        <button class="colorChip" data-color="#e3dbff" style="background:#e3dbff"></button>
-        <button class="colorChip" data-color="#dff5e3" style="background:#dff5e3"></button>
-        <button class="colorChip" data-color="#111111" style="background:#111111"></button>
-      </div>
-
-      <label>전체 배경 사진 넣기
-        <input id="bgImage" type="file" accept="image/*">
-      </label>
-
-      <div class="rowSwitch">
-        <span>흑백 전환</span>
-        <label class="switch"><input id="bwToggle" type="checkbox"><span class="slider"></span></label>
+        <textarea id="promptBox" readonly></textarea>
+        <button id="copyPromptBtn" class="secondary">프롬프트 복사</button>
       </div>
 
       <div class="uploadGrid">
@@ -86,21 +115,21 @@
         <label>4컷 캐릭터 PNG <input class="charInput" data-i="3" type="file" accept="image/png,image/*"></label>
       </div>
 
-      <label>하단 문구
-        <input id="captionText" type="text" placeholder="예: TODAY WITH YOU">
-      </label>
-
-      <div class="previewWrap"><div id="framePreview" class="canvasView"></div></div>
-
-      <button id="toShootBtn" class="primary">촬영/사진 넣기</button>
+      <div class="previewWrap"><div id="characterPreview" class="canvasView"></div></div>
+      <button id="toPhotoBtn" class="primary wide">다음: 사진 찍기</button>
     </section>
 
-    <section id="shootScreen" class="panel hidden">
-      <div class="top">
-        <button id="backBuildBtn" class="ghost">설정으로</button>
-        <strong id="shotNow">1컷</strong>
+    <section id="photoScreen" class="screen hidden">
+      <div class="topBar">
+        <button id="backToCharacterBtn" class="ghost">캐릭터 단계로</button>
+        <span class="chip">STEP 3</span>
       </div>
-      <div class="previewWrap"><div id="livePreview" class="canvasView"></div></div>
+      <h1>사진을 찍어.</h1>
+      <p class="sub">캐릭터 이미지는 위에 고정되고, 네 사진은 그 아래에 들어간다.</p>
+
+      <div class="previewWrap"><div id="photoPreview" class="canvasView"></div></div>
+      <div class="shotNow"><strong id="currentShotText">1컷</strong></div>
+
       <div class="actions">
         <button id="cameraModeBtn" class="secondary">카메라로 찍기</button>
         <button id="uploadModeBtn" class="secondary">사진 업로드</button>
@@ -116,22 +145,54 @@
         <label>3컷 사진 <input class="photoInput" data-i="2" type="file" accept="image/*"></label>
         <label>4컷 사진 <input class="photoInput" data-i="3" type="file" accept="image/*"></label>
       </div>
+
       <div id="thumbs" class="thumbs"></div>
-      <button id="finishBtn" class="primary hidden">출력 미리보기</button>
+      <button id="toBackgroundBtn" class="primary wide hidden">다음: 배경 고르기</button>
     </section>
 
-    <section id="resultScreen" class="panel hidden">
-      <span class="pill">PRINT</span>
-      <h2>포토부스 출력</h2>
-      <p class="small">출력 모션이 끝나면 PNG로 저장할 수 있어.</p>
-      <div class="printStage">
-        <div class="machineTop">PHOTO BOOTH</div>
-        <div class="slotWindow"><img id="printStrip" alt="출력 스트립"></div>
+    <section id="backgroundScreen" class="screen hidden">
+      <div class="topBar">
+        <button id="backToPhotoBtn" class="ghost">사진 단계로</button>
+        <span class="chip">STEP 4</span>
       </div>
+      <h1>마지막으로 배경을 골라.</h1>
+      <p class="sub">사진과 캐릭터가 완성된 뒤 배경색이나 배경 이미지를 입힌다.</p>
+
+      <h2>배경색</h2>
+      <div id="colorChips" class="colorChips">
+        <button class="colorChip active" data-color="#ffffff" style="background:#ffffff"></button>
+        <button class="colorChip" data-color="#ffe1ec" style="background:#ffe1ec"></button>
+        <button class="colorChip" data-color="#dcecff" style="background:#dcecff"></button>
+        <button class="colorChip" data-color="#fff0c9" style="background:#fff0c9"></button>
+        <button class="colorChip" data-color="#e8dfff" style="background:#e8dfff"></button>
+        <button class="colorChip" data-color="#dff5df" style="background:#dff5df"></button>
+        <button class="colorChip" data-color="#1a1a1a" style="background:#1a1a1a"></button>
+      </div>
+
+      <label>전체 배경 이미지 선택
+        <input id="bgImageInput" type="file" accept="image/*">
+      </label>
+
+      <div class="previewWrap"><div id="backgroundPreview" class="canvasView"></div></div>
+      <button id="toResultBtn" class="primary wide">포토부스 출력하기</button>
+    </section>
+
+    <section id="resultScreen" class="screen hidden">
+      <div class="topBar">
+        <button id="retryBtn" class="ghost">배경 다시 고르기</button>
+        <span class="chip">PRINT</span>
+      </div>
+      <h1>출력 완료.</h1>
+      <p class="sub">스트립이 뽑히는 모션이 끝나면 저장하면 된다.</p>
+
+      <div class="printMachine">
+        <div class="machineTop">SKETCH BOOTH</div>
+        <div class="printSlot"><img id="printImg" alt="완성본"></div>
+      </div>
+
       <div class="actions">
-        <button id="playPrintBtn" class="secondary">출력 모션 다시 보기</button>
+        <button id="replayPrintBtn" class="secondary">출력 다시 보기</button>
         <button id="downloadBtn" class="primary">PNG 저장</button>
-        <button id="retryBtn" class="secondary">사진 다시 넣기</button>
         <button id="resetBtn" class="ghost">처음으로</button>
       </div>
     </section>
@@ -139,6 +200,6 @@
 
   <div id="countdown" class="countdown hidden">3</div>
   <canvas id="workCanvas" class="hidden"></canvas>
-  <script src="script.js?v=realprint1"></script>
+  <script src="script.js?v=deploy1"></script>
 </body>
 </html>
