@@ -3,218 +3,219 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f7f3ff" />
+  <meta name="theme-color" content="#0a0a0f" />
   <title>Sketch Booth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 <main class="app">
 
-  <section id="homeScreen" class="screen homeScreen">
-    <div class="topNav">
-      <div class="brand">Sketch Booth</div>
-      <span class="privacy">no login · no storage</span>
-    </div>
-
+  <!-- HOME -->
+  <section id="homeScreen" class="screen active">
+    <header class="topNav">
+      <div class="logo">SKETCH<br>BOOTH</div>
+      <span class="badge">no login · no storage</span>
+    </header>
     <div class="hero">
-      <div class="hostStage">
-        <div class="hostBubble">
-          <span class="miniLabel">BOOTH HOST</span>
-          <h1>네컷 만들 거면, 내가 순서 잡아줄게.</h1>
-          <p>출력 모양을 고르고, 칸 크기에 맞는 캐릭터 PNG를 만든 다음, 프레임 안에서 사진을 찍으면 돼. 배경색과 배경 이미지는 따로 고를 수 있어.</p>
-          <button id="startBtn" class="primary">시작하기</button>
-        </div>
-        <img class="hostImg" src="host.png" alt="가이드 캐릭터">
+      <div class="heroText">
+        <p class="eyebrow">CUSTOM FOUR-CUT PHOTO</p>
+        <h1>프레임 고르고<br>캐릭터 올리고<br>바로 찍어.</h1>
+        <p class="desc">사이즈를 고르면 칸이 자동으로 잡히고, 캐릭터 PNG를 올린 뒤 진짜 포토부스처럼 프레임 안에서 촬영한다.</p>
+        <button id="startBtn" class="btn-primary">시작하기 →</button>
       </div>
-
-      <div class="productPanel">
-        <span class="miniLabel">FOUR CUT FLOW</span>
-        <h2>고르는 건 포토부스처럼.<br>만드는 건 자동으로.</h2>
-        <div class="flow">
-          <span>사이즈 선택</span>
-          <span>캐릭터 PNG</span>
-          <span>배경색</span>
-          <span>촬영</span>
-          <span>최종 배경</span>
-          <span>저장</span>
+      <div class="heroVisual">
+        <div class="filmStrip">
+          <div class="filmHole"></div><div class="filmHole"></div><div class="filmHole"></div>
+          <div class="filmCell c1"></div>
+          <div class="filmCell c2"></div>
+          <div class="filmCell c3"></div>
+          <div class="filmCell c4"></div>
+          <div class="filmHole"></div><div class="filmHole"></div><div class="filmHole"></div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- STEP 1: SIZE -->
   <section id="sizeScreen" class="screen hidden">
-    <div class="stepHead">
-      <button id="backHomeBtn" class="ghost">처음으로</button>
-      <div class="hostLine"><img src="host.png" alt=""><span>먼저 네컷 타입부터 골라. 누르면 칸 크기가 바로 맞춰져.</span></div>
+    <div class="stepNav">
+      <button id="backHomeBtn" class="btn-ghost">← 처음으로</button>
+      <div class="steps"><span class="step on">1</span><span class="step">2</span><span class="step">3</span><span class="step">4</span><span class="step">5</span></div>
     </div>
-
-    <h1>출력 타입 선택</h1>
-    <p class="sub">아래 예시 이미지를 누르면 완성본 크기, 캐릭터 PNG 칸 크기, 생성 프롬프트가 자동으로 연동돼.</p>
-
+    <h2 class="stepTitle">출력 타입 선택</h2>
+    <p class="stepDesc">예시를 누르면 완성본 크기와 캐릭터 PNG 칸 크기가 바뀐다.</p>
     <div class="sizeGrid">
       <button class="sizeCard" data-preset="strip">
-        <div class="mock strip"><i></i><i></i><i></i><i></i></div>
+        <div class="mockWrap"><div class="mock strip"><i></i><i></i><i></i><i></i></div></div>
         <strong>세로 스트립</strong><small>600 × 1800</small>
       </button>
       <button class="sizeCard" data-preset="strip_hd">
-        <div class="mock strip"><i></i><i></i><i></i><i></i></div>
+        <div class="mockWrap"><div class="mock strip"><i></i><i></i><i></i><i></i></div></div>
         <strong>세로 스트립 HD</strong><small>1200 × 3600</small>
       </button>
       <button class="sizeCard" data-preset="card">
-        <div class="mock grid4"><i></i><i></i><i></i><i></i></div>
+        <div class="mockWrap"><div class="mock grid4"><i></i><i></i><i></i><i></i></div></div>
         <strong>카드형 네컷</strong><small>1200 × 1800</small>
       </button>
       <button class="sizeCard" data-preset="mobile">
-        <div class="mock mobile"><i></i><i></i><i></i><i></i></div>
+        <div class="mockWrap"><div class="mock mobile"><i></i><i></i><i></i><i></i></div></div>
         <strong>모바일형 네컷</strong><small>1080 × 1920</small>
       </button>
     </div>
-
     <div id="specPanel" class="specPanel hidden">
-      <div><span>완성본</span><strong id="outputSizeText">-</strong></div>
-      <div><span>캐릭터 PNG</span><strong id="slotSizeText">-</strong></div>
-      <div><span>조건</span><strong>투명 PNG</strong></div>
+      <div class="specItem"><span>완성본</span><strong id="outputSizeText">-</strong></div>
+      <div class="specItem"><span>캐릭터 PNG 칸</span><strong id="slotSizeText">-</strong></div>
+      <div class="specItem"><span>형식</span><strong>투명 PNG</strong></div>
     </div>
-
-    <button id="toCharacterBtn" class="primary wide" disabled>이 타입으로 만들기</button>
+    <button id="toCharacterBtn" class="btn-primary wide" disabled>다음 단계 →</button>
   </section>
 
+  <!-- STEP 2: CHARACTER -->
   <section id="characterScreen" class="screen hidden">
-    <div class="stepHead">
-      <button id="backSizeBtn" class="ghost">타입 다시 고르기</button>
-      <div class="hostLine"><img src="host.png" alt=""><span>이 크기 그대로 만들면 위치 조정 없이 들어가.</span></div>
+    <div class="stepNav">
+      <button id="backSizeBtn" class="btn-ghost">← 타입 다시 고르기</button>
+      <div class="steps"><span class="step done">1</span><span class="step on">2</span><span class="step">3</span><span class="step">4</span><span class="step">5</span></div>
     </div>
-
-    <h1>컷별 캐릭터 PNG</h1>
-    <p class="sub">각 컷 이미지는 선택한 칸 크기와 같게 만들어. 사람이 들어갈 부분은 흰색이 아니라 완전히 투명해야 해.</p>
+    <h2 class="stepTitle">컷별 캐릭터 PNG</h2>
+    <p class="stepDesc">각 컷에 올릴 캐릭터 PNG를 업로드한다. 사람이 들어갈 부분은 완전히 투명해야 한다.</p>
 
     <div class="promptBox">
-      <div class="promptTop">
-        <strong>AI 이미지 생성 프롬프트</strong>
-        <button id="copyPromptBtn" class="secondary small">복사</button>
+      <div class="promptHead">
+        <span class="promptLabel">AI 이미지 생성 프롬프트</span>
+        <button id="copyPromptBtn" class="btn-small">복사</button>
       </div>
+      <p class="promptHint">아래 프롬프트를 복사해서 원하는 옷차림과 포즈를 직접 수정한 뒤 AI 이미지 생성 툴에 붙여넣으면 돼.</p>
       <textarea id="promptText" readonly></textarea>
+      <p class="promptEdit">✏️ 수정 포인트: <code>[원하는 옷차림 예: 교복 / 캐주얼 / 드레스]</code> 와 <code>[원하는 포즈 예: 손 흔들기 / 브이 / 기대기]</code> 부분을 바꿔서 써.</p>
     </div>
 
     <div class="uploadGrid">
-      <label>1컷 캐릭터 PNG <input class="charInput" data-i="0" type="file" accept="image/png,image/*"></label>
-      <label>2컷 캐릭터 PNG <input class="charInput" data-i="1" type="file" accept="image/png,image/*"></label>
-      <label>3컷 캐릭터 PNG <input class="charInput" data-i="2" type="file" accept="image/png,image/*"></label>
-      <label>4컷 캐릭터 PNG <input class="charInput" data-i="3" type="file" accept="image/png,image/*"></label>
+      <label class="uploadCard">
+        <span class="uploadNum">1컷</span>
+        <input class="charInput" data-i="0" type="file" accept="image/png,image/*">
+        <span class="uploadHint">PNG 업로드</span>
+      </label>
+      <label class="uploadCard">
+        <span class="uploadNum">2컷</span>
+        <input class="charInput" data-i="1" type="file" accept="image/png,image/*">
+        <span class="uploadHint">PNG 업로드</span>
+      </label>
+      <label class="uploadCard">
+        <span class="uploadNum">3컷</span>
+        <input class="charInput" data-i="2" type="file" accept="image/png,image/*">
+        <span class="uploadHint">PNG 업로드</span>
+      </label>
+      <label class="uploadCard">
+        <span class="uploadNum">4컷</span>
+        <input class="charInput" data-i="3" type="file" accept="image/png,image/*">
+        <span class="uploadHint">PNG 업로드</span>
+      </label>
     </div>
-
     <div class="previewWrap"><div id="characterPreview" class="preview"></div></div>
-    <button id="toBoothBgBtn" class="primary wide">포토부스 안 배경색 고르기</button>
+    <button id="toBoothBgBtn" class="btn-primary wide">다음 단계 →</button>
   </section>
 
+  <!-- STEP 3: BOOTH BG COLOR -->
   <section id="boothBgScreen" class="screen hidden">
-    <div class="stepHead">
-      <button id="backCharacterBtn" class="ghost">캐릭터 다시 넣기</button>
-      <div class="hostLine"><img src="host.png" alt=""><span>이건 사진 칸 안에서 보이는 포토부스 배경색이야.</span></div>
+    <div class="stepNav">
+      <button id="backCharacterBtn" class="btn-ghost">← 캐릭터 다시 넣기</button>
+      <div class="steps"><span class="step done">1</span><span class="step done">2</span><span class="step on">3</span><span class="step">4</span><span class="step">5</span></div>
     </div>
-
-    <h1>포토부스 안 배경색</h1>
-    <p class="sub">촬영 화면에서 네 뒤에 깔리는 색. 최종 전체 배경색/이미지랑은 따로야.</p>
-
+    <h2 class="stepTitle">프레임 안 배경색</h2>
+    <p class="stepDesc">사진 칸 안쪽에 깔리는 색이다. 촬영 화면에서도 이 색 위에 네가 보인다.</p>
     <div id="boothColorGrid" class="colorGrid">
-      <button class="colorChip active" data-color="#f7f7f7" style="background:#f7f7f7"></button>
-      <button class="colorChip" data-color="#ffdce8" style="background:#ffdce8"></button>
-      <button class="colorChip" data-color="#dcecff" style="background:#dcecff"></button>
-      <button class="colorChip" data-color="#fff0c8" style="background:#fff0c8"></button>
-      <button class="colorChip" data-color="#e6ddff" style="background:#e6ddff"></button>
-      <button class="colorChip" data-color="#dcf6df" style="background:#dcf6df"></button>
-      <button class="colorChip" data-color="#222222" style="background:#222222"></button>
+      <button class="colorChip active" data-color="#f7f7f7" style="background:#f7f7f7" title="화이트"></button>
+      <button class="colorChip" data-color="#ffdce8" style="background:#ffdce8" title="핑크"></button>
+      <button class="colorChip" data-color="#dcecff" style="background:#dcecff" title="블루"></button>
+      <button class="colorChip" data-color="#fff0c8" style="background:#fff0c8" title="옐로우"></button>
+      <button class="colorChip" data-color="#e6ddff" style="background:#e6ddff" title="라벤더"></button>
+      <button class="colorChip" data-color="#dcf6df" style="background:#dcf6df" title="민트"></button>
+      <button class="colorChip" data-color="#222222" style="background:#222222" title="블랙"></button>
     </div>
-
     <div class="previewWrap"><div id="boothBgPreview" class="preview"></div></div>
-    <button id="toPhotoBtn" class="primary wide">프레임 안에서 사진 찍기</button>
+    <button id="toPhotoBtn" class="btn-primary wide">다음 단계 →</button>
   </section>
 
+  <!-- STEP 4: SHOOT -->
   <section id="photoScreen" class="screen hidden">
-    <div class="stepHead">
-      <button id="backBoothBgBtn" class="ghost">배경색 다시 고르기</button>
-      <div class="hostLine"><img src="host.png" alt=""><span id="shotGuideText">지금 보이는 프레임 안에서 움직이면 돼.</span></div>
+    <div class="stepNav">
+      <button id="backBoothBgBtn" class="btn-ghost">← 배경 다시 고르기</button>
+      <div class="steps"><span class="step done">1</span><span class="step done">2</span><span class="step done">3</span><span class="step on">4</span><span class="step">5</span></div>
     </div>
+    <h2 class="stepTitle">사진 촬영</h2>
+    <p class="stepDesc">캐릭터 PNG가 위에 고정되고, 카메라 화면 안에서 네가 보이는 그대로 찍힌다.</p>
 
-    <h1>사진 촬영</h1>
-    <p class="sub">카메라는 현재 컷 안에서만 켜지고, 캐릭터 PNG는 카메라 위에 고정돼. 움직이는 건 너뿐이야.</p>
-
-    <div class="previewWrap"><div id="photoPreview" class="preview"></div></div>
-    <div class="shotLabel"><strong id="currentShotText">1컷</strong></div>
-
-    <div class="actions">
-      <button id="cameraModeBtn" class="secondary">카메라로 찍기</button>
-      <button id="uploadModeBtn" class="secondary">사진 업로드</button>
+    <div class="shootLayout">
+      <div class="previewWrap shootPreview"><div id="photoPreview" class="preview"></div></div>
+      <div class="shootPanel">
+        <div class="shotIndicator"><strong id="currentShotText">1컷 촬영 중</strong></div>
+        <div class="shootModeTab">
+          <button id="cameraModeBtn" class="modeTab active">카메라</button>
+          <button id="uploadModeBtn" class="modeTab">사진 업로드</button>
+        </div>
+        <div id="cameraControls">
+          <button id="startCameraBtn" class="btn-primary wide">카메라 켜기</button>
+          <button id="captureBtn" class="btn-secondary wide" disabled>현재 컷 찍기</button>
+          <button id="autoShootBtn" class="btn-accent wide" disabled>1컷부터 자동 촬영 (3·2·1)</button>
+        </div>
+        <div id="uploadControls" class="hidden">
+          <div class="uploadGrid small">
+            <label class="uploadCard"><span class="uploadNum">1컷</span><input class="photoInput" data-i="0" type="file" accept="image/*"></label>
+            <label class="uploadCard"><span class="uploadNum">2컷</span><input class="photoInput" data-i="1" type="file" accept="image/*"></label>
+            <label class="uploadCard"><span class="uploadNum">3컷</span><input class="photoInput" data-i="2" type="file" accept="image/*"></label>
+            <label class="uploadCard"><span class="uploadNum">4컷</span><input class="photoInput" data-i="3" type="file" accept="image/*"></label>
+          </div>
+        </div>
+        <div id="thumbs" class="thumbs"></div>
+      </div>
     </div>
-
-    <div id="cameraControls" class="actions hidden">
-      <button id="startCameraBtn" class="primary">카메라 켜기</button>
-      <button id="autoShootBtn" class="primary">1컷부터 자동 촬영</button>
-      <button id="captureBtn" class="secondary">현재 컷만 찍기</button>
-    </div>
-
-    <div id="uploadControls" class="uploadGrid hidden">
-      <label>1컷 사진 <input class="photoInput" data-i="0" type="file" accept="image/*"></label>
-      <label>2컷 사진 <input class="photoInput" data-i="1" type="file" accept="image/*"></label>
-      <label>3컷 사진 <input class="photoInput" data-i="2" type="file" accept="image/*"></label>
-      <label>4컷 사진 <input class="photoInput" data-i="3" type="file" accept="image/*"></label>
-    </div>
-
-    <div id="thumbs" class="thumbs"></div>
-    <button id="toFinalBgBtn" class="primary wide hidden">완성본 배경 고르기</button>
+    <button id="toFinalBgBtn" class="btn-primary wide hidden">다음 단계 →</button>
   </section>
 
+  <!-- STEP 5: OUTSIDE FRAME -->
   <section id="finalBgScreen" class="screen hidden">
-    <div class="stepHead">
-      <button id="backPhotoBtn" class="ghost">사진 다시 보기</button>
-      <div class="hostLine"><img src="host.png" alt=""><span>여기는 완성본 전체 뒤에 깔리는 배경이야.</span></div>
+    <div class="stepNav">
+      <button id="backPhotoBtn" class="btn-ghost">← 사진 다시 찍기</button>
+      <div class="steps"><span class="step done">1</span><span class="step done">2</span><span class="step done">3</span><span class="step done">4</span><span class="step on">5</span></div>
     </div>
-
-    <h1>완성본 뒤 배경</h1>
-    <p class="sub">여기서 고르는 색/이미지는 사진 칸 안이 아니라 완성본 전체 뒤에 들어가.</p>
-
-    <h2>뒤 배경색</h2>
-    <div id="finalColorGrid" class="colorGrid">
-      <button class="colorChip active" data-color="#ffffff" style="background:#ffffff"></button>
-      <button class="colorChip" data-color="#fff6f6" style="background:#fff6f6"></button>
-      <button class="colorChip" data-color="#f3edff" style="background:#f3edff"></button>
-      <button class="colorChip" data-color="#eef7ff" style="background:#eef7ff"></button>
-      <button class="colorChip" data-color="#fff4d8" style="background:#fff4d8"></button>
-      <button class="colorChip" data-color="#eff8ee" style="background:#eff8ee"></button>
-      <button class="colorChip" data-color="#191919" style="background:#191919"></button>
-    </div>
-
-    <label>뒤 배경 이미지 선택 <input id="finalBgImageInput" type="file" accept="image/*"></label>
-    <button id="clearFinalImageBtn" class="secondary wide">이미지 없이 색만 쓰기</button>
-
+    <h2 class="stepTitle">프레임 밖 배경 이미지</h2>
+    <p class="stepDesc">네컷 칸 바깥 영역에 깔리는 이미지다. 안 골라도 기본 바탕으로 출력된다.</p>
+    <label class="uploadCard wide">
+      프레임 밖 배경 이미지 선택
+      <input id="finalBgImageInput" type="file" accept="image/*">
+    </label>
+    <button id="clearFinalImageBtn" class="btn-secondary wide">이미지 없이 기본 바탕 쓰기</button>
     <div class="previewWrap"><div id="finalBgPreview" class="preview"></div></div>
-    <button id="toResultBtn" class="primary wide">출력하기</button>
+    <button id="toResultBtn" class="btn-primary wide">출력하기</button>
+    <button id="skipFinalBgBtn" class="btn-ghost wide center">이 단계 건너뛰고 바로 출력</button>
   </section>
 
+  <!-- RESULT -->
   <section id="resultScreen" class="screen hidden">
-    <div class="stepHead">
-      <button id="retryBtn" class="ghost">배경 다시 고르기</button>
-      <div class="hostLine"><img src="host.png" alt=""><span>끝. 저장하면 돼.</span></div>
+    <div class="stepNav">
+      <button id="retryBtn" class="btn-ghost">← 배경 다시 고르기</button>
+      <span class="badge">완료</span>
     </div>
-
-    <h1>출력 완료</h1>
-    <p class="sub">포토부스처럼 아래로 뽑히는 모션 뒤 PNG로 저장돼.</p>
-
-    <div class="printMachine">
-      <div class="machineTop">SKETCH BOOTH</div>
+    <h2 class="stepTitle">출력 완료</h2>
+    <p class="stepDesc">저장 버튼이 안 먹히면 이미지를 길게 눌러서 사진 앱에 저장해.</p>
+    <div class="resultMachine">
+      <div class="machineTop">✦ SKETCH BOOTH ✦</div>
       <div class="printSlot"><img id="printImg" alt="완성본"></div>
     </div>
-
-    <div class="actions">
-      <button id="replayPrintBtn" class="secondary">출력 다시 보기</button>
-      <button id="downloadBtn" class="primary">PNG 저장</button>
-      <button id="resetBtn" class="ghost">처음으로</button>
+    <div id="saveError" class="errorMsg hidden">⚠ 저장 중 오류가 발생했어. 이미지만 열기를 써.</div>
+    <div class="resultActions">
+      <button id="downloadBtn" class="btn-primary">PNG 저장</button>
+      <button id="openImageBtn" class="btn-secondary">이미지만 열기</button>
+      <button id="replayPrintBtn" class="btn-secondary">출력 다시 보기</button>
+      <button id="resetBtn" class="btn-ghost">처음으로</button>
     </div>
   </section>
 </main>
 
 <div id="countdown" class="countdown hidden">3</div>
 <canvas id="workCanvas" class="hidden"></canvas>
-<script src="script.js?v=finalsell1"></script>
+<script src="script.js?v=2"></script>
 </body>
 </html>
